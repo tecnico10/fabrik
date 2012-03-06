@@ -28,6 +28,9 @@ class FabrikViewPackage extends JView
 	public function listform()
 	{
 		FabrikHelperHTML::framework();
+		$lang = JFactory::getLanguage();
+		$client	= JApplicationHelper::getClientInfo(0);
+		$lang->load('mod_fabrik_list', $client->path.'/modules/mod_fabrik_list', null, false, false);
 		$this->listform	= $this->get('PackageListForm');
 		JHtml::_('behavior.modal', 'a.modal');
 		parent::display('list');
@@ -68,7 +71,7 @@ class FabrikViewPackage extends JView
 		$document = JFactory::getDocument();
 
 		$opts = new stdClass();
-
+		$opts->editable = true;
 		$opts->tabs = $tabs;
 		$opts->blocks = $blocks;
 		$opts->tabelement = 'packagemenu';
