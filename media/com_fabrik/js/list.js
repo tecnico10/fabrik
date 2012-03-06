@@ -732,7 +732,9 @@ var FbList = new Class({
 				list.setActive(row);
 				var rowid = row.id.split('_').getLast();
 				if (list.options.links.edit === '') {
-					url = Fabrik.liveSite + "index.php?option=com_fabrik&view=form&formid=" + list.options.formid + '&rowid=' + rowid + '&tmpl=component&ajax=1';
+					// $$$ rob worng for packages
+					//url = Fabrik.liveSite + "index.php?option=com_fabrik&view=form&formid=" + list.options.formid + '&rowid=' + rowid + '&tmpl=component&ajax=1';
+					url = e.target.get('tag') === 'a' ? e.target.get('href') : e.target.getParent().get('href');
 					loadMethod = 'xhr';
 				} else {
 					if (e.target.get('tag') === 'a') {
@@ -779,7 +781,10 @@ var FbList = new Class({
 				list.setActive(row);
 				var rowid = row.id.split('_').getLast();
 				if (list.options.links.detail === '') {
-					url = Fabrik.liveSite + "index.php?option=com_fabrik&view=details&formid=" + list.options.formid + '&rowid=' + rowid + '&tmpl=component&ajax=1';
+					// $$$ rob wrong for packages.
+					debugger;
+					//url = Fabrik.liveSite + "index.php?option=com_fabrik&view=details&formid=" + list.options.formid + '&rowid=' + rowid + '&tmpl=component&ajax=1';
+					url = e.target.get('tag') === 'a' ? e.target.get('href') : e.target.getParent().get('href');
 					loadMethod = 'xhr';
 				} else {
 					if (e.target.get('tag') === 'a') {

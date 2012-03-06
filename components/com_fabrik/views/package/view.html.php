@@ -14,7 +14,7 @@ class fabrikViewPackage extends JView
 		$state = $this->get('State');
 		$item = $this->get('Item');
 		$document = JFactory::getDocument();
-		$srcs = array('media/com_fabrik/js/icons.js', 'media/com_fabrik/js/icongen.js', 'media/com_fabrik/js/canvas.js',
+		$srcs = array('media/com_fabrik/js/canvas.js',
 		'media/com_fabrik/js/history.js', 'media/com_fabrik/js/keynav.js', 'media/com_fabrik/js/tabs.js',
 		'media/com_fabrik/js/pages.js', 'media/com_fabrik/js/frontpackage.js');
 		
@@ -42,7 +42,7 @@ class fabrikViewPackage extends JView
 		tabelement : 'packagemenu',
 		pagecontainer : 'packagepages',
 		layout: $layout,
-		'packageid':$id,
+		'packageid': $id,
 		'package':'$item->component_name'
 	});
 		});";

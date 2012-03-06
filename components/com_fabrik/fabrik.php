@@ -154,7 +154,6 @@ if (JRequest::getVar('yql') == 1)
 	$program = $service->get($query, array(), 'event', null);
 }
 //end web service testing ///
-
 $controller->execute($task);
 
 // Redirect if set by the controller

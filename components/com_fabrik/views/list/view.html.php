@@ -60,8 +60,8 @@ class FabrikViewList extends JView{
 		$opts = new stdClass();
 		$opts->admin = $app->isAdmin();
 		$opts->ajax = (int)$model->isAjax();
-		$opts->ajax_links = (bool)$params->get('list_ajax_links', $opts->ajax);
-
+		//$opts->ajax_links = (bool)$params->get('list_ajax_links', $opts->ajax);
+		$opts->ajax_links = (bool) $model->isAjaxLinks();
 		$opts->links = array('detail' => $params->get('detailurl'), 'edit' => $params->get('editurl'), 'add' => $params->get('addurl'));
 		$opts->filterMethod = $this->filter_action;
 		$opts->form = 'listform_' . $listref;
@@ -608,10 +608,10 @@ class FabrikViewList extends JView{
 		$this->hiddenFields[] = JHTML::_('form.token');
 
 		$this->hiddenFields[] = '<input type="hidden" name="format" value="html" />';
-		//$packageId = JRequest::getInt('_packageId', 0);
+		//$packageId = JRequest::getInt('packageid', 0);
 		// $$$ rob testing for ajax table in module
 		$packageId = $model->packageId;
-		$this->hiddenFields[] = '<input type="hidden" name="_packageId" value="' . $packageId . '" />';
+		$this->hiddenFields[] = '<input type="hidden" name="packageid" value="' . $packageId . '" />';
 		if ($app->isAdmin()) {
 			$this->hiddenFields[] = '<input type="hidden" name="task" value="list.view" />';
 		} else {

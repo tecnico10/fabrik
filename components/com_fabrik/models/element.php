@@ -1206,7 +1206,7 @@ class plgFabrik_Element extends FabrikPlugin
 		$element->containerClass = $this->containerClass($element);
 
 		$element->element = $this->_getElement($model->_data, $c, $groupModel);
-
+		
 		if ($params->get('tipsoverelement', false)) {
 			$element->element = $this->rollover($element->element, $model->_data);
 		}
@@ -1348,7 +1348,6 @@ class plgFabrik_Element extends FabrikPlugin
 		if (!$this->canView() && !$this->canUse()) {
 			return '';
 		}
-
 		//used for working out if the element should behave as if it was in a new form (joined grouped) even when editing a record
 		$this->_inRepeatGroup = $groupModel->canRepeat();
 		$this->_inJoin = $groupModel->isJoin();

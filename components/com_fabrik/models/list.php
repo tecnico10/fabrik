@@ -262,7 +262,6 @@ class FabrikFEModelList extends JModelForm {
 		if ($this->_outPutFormat == 'fabrikfeed') {
 			$this->_outPutFormat = 'feed';
 		}
-
 		$item = $this->getTable();
 		if ($item->db_table_name == '') {
 			return JError::raiseError(500, JText::_('COM_FABRIK_INCORRECT_LIST_ID'));
@@ -432,7 +431,7 @@ class FabrikFEModelList extends JModelForm {
 		}
 		ini_set('mysql.trace_mode', $traceModel);
 		$nav = $this->getPagination($this->totalRecords, $this->limitStart, $this->limitLength);
-
+		
 		JDEBUG ? $profiler->mark('query run and data loaded') : null;
 		//@TODO test in J1.7
 		//	$this->translateData($this->_data);
@@ -5686,8 +5685,12 @@ class FabrikFEModelList extends JModelForm {
 			} else {
 				$link .= "index.php?option=com_fabrik&view=$view&formid=".$table->form_id.$keyIdentifier;
 			}
-			if ($this->packageId !== 0) {
-				$link .= '&tmpl=component';
+			if ($this->packageId !== 0 || $this->isAjaxLinks()) {
+				$link .= '&tmpl=component&ajax=1';
+			}
+			if ($this->packageId !== 0)
+			{
+				$link .= '&packageid=' . $this->packageId;
 			}
 			$link = JRoute::_($link);
 		} else {
@@ -5753,8 +5756,12 @@ class FabrikFEModelList extends JModelForm {
 				$url = "index.php?option=com_fabrik&view=form&Itemid=$Itemid&formid=" . $table->form_id . "$keyIdentifier&listid=".$this->getId();
 			}
 
-			if ($this->packageId !== 0) {
-				$url .= '&tmpl=component';
+			if ($this->packageId !== 0 || $this->isAjaxLinks()) {
+				$url .= '&tmpl=component&ajax=1';
+			}
+			if ($this->packageId !== 0)
+			{
+				$url .= '&packageid=' . $this->packageId;
 			}
 			$link = JRoute::_($url);
 		} else {
@@ -6118,14 +6125,21 @@ class FabrikFEModelList extends JModelForm {
 
 	/**
 	 * model edit/add links can be set separately to the ajax option
-	 * @return boolean
+	 * @return	boolean
 	 */
 
-	protected function isAjaxLinks()
+	public function isAjaxLinks()
 	{
 		$params = $this->getParams();
 		$ajax = $this->isAjax();
-		return (bool)$params->get('list_ajax_links', $ajax);
+		if (JRequest::getVar('ajaxlinks', false) == '1')
+		{
+			return true;
+		}
+		else
+		{
+			return (bool)$params->get('list_ajax_links', $ajax);
+		}
 	}
 
 	/**
@@ -6326,6 +6340,10 @@ class FabrikFEModelList extends JModelForm {
 			}
 			$qs['formid'] = $this->getTable()->form_id;
 			$qs['rowid'] = '0';
+			if ($this->packageId !== 0)
+			{
+				$qs['packageid'] = $this->packageId;
+			}
 		}
 		$qs = array_merge($qs, $addurl_qs);
 		$qs_args = array();

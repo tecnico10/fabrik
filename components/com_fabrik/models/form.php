@@ -119,6 +119,7 @@ class FabrikFEModelForm extends FabModelForm
 		parent::__construct();
 		$usersConfig = JComponentHelper::getParams('com_fabrik');
 		$id = JRequest::getInt('formid', $usersConfig->get('formid'));
+		$this->packageId = (int)JRequest::getInt('packageid', $usersConfig->get('packageid'));
 		$this->setId($id);
 	}
 

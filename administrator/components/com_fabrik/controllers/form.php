@@ -79,7 +79,7 @@ class FabrikControllerForm extends JControllerForm
 		}
 		if (!$model->validate()) {
 			//if its in a module with ajax or in a package
-			if (JRequest::getInt('_packageId') !== 0) {
+			if (JRequest::getInt('packageid') !== 0) {
 				echo $model->getJsonErrors();
 				return;
 			}
@@ -115,7 +115,7 @@ class FabrikControllerForm extends JControllerForm
 
 		$msg = $model->getParams()->get('suppress_msgs', '0') == '0' ? $model->getParams()->get('submit-success-msg', JText::_('COM_FABRIK_RECORD_ADDED_UPDATED')) : '';
 
-		if (JRequest::getInt('_packageId') !== 0) {
+		if (JRequest::getInt('packageid') !== 0) {
 			$rowid = JRequest::getInt('rowid');
 			echo json_encode(array('msg' => $msg, 'rowid' => $rowid));
 			return;

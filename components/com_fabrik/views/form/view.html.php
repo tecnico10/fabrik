@@ -528,7 +528,7 @@ class fabrikViewForm extends JView
 		'<input type="hidden" name="fabrik_referrer" value="'.$reffer.'" />',
 		'<input type="hidden" name="fabrik_ajax" value="'.(int)$model->isAjax().'" />');
 
-		$fields[] = '<input type="hidden" name="_packageId" value="'.$model->packageId.'" />';
+		$fields[] = '<input type="hidden" name="packageid" value="'.$model->packageId.'" />';
 
 		//if ($usekey = JRequest::getVar('usekey')) {
 		if ($usekey = FabrikWorker::getMenuOrRequestVar('usekey', '')) {

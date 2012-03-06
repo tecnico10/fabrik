@@ -103,7 +103,7 @@ class FabrikControllerForm extends JController
 		if (JRequest::getBool('fabrik_ignorevalidation', false) != true) { //put in when saving page of form
 			if (!$model->validate()) {
 				//if its in a module with ajax or in a package
-				if (JRequest::getInt('_packageId') !== 0) {
+				if (JRequest::getInt('packageid') !== 0) {
 					$data = array('modified' => $model->_modifiedValidationData);
 					//validating entire group when navigating form pages
 					$data['errors'] = $model->_arErrors;
@@ -151,7 +151,7 @@ class FabrikControllerForm extends JController
 			return;
 		}
 
-		if (JRequest::getInt('_packageId') !== 0) {
+		if (JRequest::getInt('packageid') !== 0) {
 			echo json_encode(array('msg' => $msg));
 			return;
 		}

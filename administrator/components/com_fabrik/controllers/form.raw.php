@@ -72,7 +72,7 @@ class FabrikControllerForm extends JControllerForm
 		}
 		if (!$model->validate()) {
 			//if its in a module with ajax or in a package
-			if (JRequest::getInt('_packageId') !== 0) {
+			if (JRequest::getInt('packageid') !== 0) {
 				$data = array('modified' => $model->_modifiedValidationData);
 				//validating entire group when navigating form pages
 				$data['errors'] = $model->_arErrors;
@@ -118,7 +118,7 @@ class FabrikControllerForm extends JControllerForm
 			echo $model->inLineEditResult();
 			return;
 		}
-		if (JRequest::getInt('_packageId') !== 0) {
+		if (JRequest::getInt('packageid') !== 0) {
 			$rowid = JRequest::getInt('rowid');
 			echo json_encode(array('msg' => $msg, 'rowid' => $rowid));
 			return;

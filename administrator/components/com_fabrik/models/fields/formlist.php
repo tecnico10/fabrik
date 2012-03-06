@@ -44,7 +44,8 @@ class JFormFieldFormList extends JFormFieldList
 		$db	= FabrikWorker::getDbo(true);
 		$query = $db->getQuery(true);
 		$query->select("id AS value, label AS ".$db->quote('text'));
-		$query->from("#__{package}_forms");
+		//$query->from("#__{package}_forms");
+		$query->from("#__fabrik_forms");
 		$query->order("label ASC");
 		$db->setQuery($query);
 		$rows = $db->loadObjectList();
