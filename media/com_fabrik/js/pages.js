@@ -1,3 +1,6 @@
+/**
+ * each package tab contains a series of page objects. The Pages class manages those page objects.
+ */
 var Pages = new Class({
 	initialize: function (container, editable) {
 		this.editable = editable;
@@ -25,11 +28,23 @@ var Pages = new Class({
 		c.setStyle('z-index', max);
 	},
 	
-	clearActive: function () {
+	/**
+	 * unset the active page.
+	 */
+	clearActive: function (e) {
+		if (e) {
+			if (e.target.getParent('.fabrikWindow')) {
+				//mouse up in window so dont clear
+				return;
+			}
+		}
 		delete this.active;
 		document.getElements('.itemPlaceHolder').removeClass('active');
 	},
 	
+	/**
+	 * move a page with shit and or arrow keys
+	 */
 	moveItem: function (k, shift) {
 		if (this.active && this.editable) {
 			shift = shift ? 10 : 0;
@@ -51,6 +66,9 @@ var Pages = new Class({
 		}
 	},
 	
+	/**
+	 * add a page
+	 */
 	add: function (tabs, t) {
 		var page = new Page(t, this.editable);
 		this.container.adopt(page.page);
@@ -59,6 +77,9 @@ var Pages = new Class({
 		this.show();
 	},
 	
+	/**
+	 * remove a page
+	 */
 	remove: function (tabs, t) {
 		t = t.retrieve('ref');
 		//this.pages[t].remove();
@@ -123,6 +144,10 @@ var Pages = new Class({
 		return r;
 	}
 });
+
+/**
+ * a page contains a form/list/viz
+ */
 
 Page = new Class({
 	initialize: function (t, editable) {

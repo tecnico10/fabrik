@@ -30,7 +30,7 @@ class FabrikViewPackage extends JView
 		FabrikHelperHTML::framework();
 		$lang = JFactory::getLanguage();
 		$client	= JApplicationHelper::getClientInfo(0);
-		$lang->load('mod_fabrik_list', $client->path.'/modules/mod_fabrik_list', null, false, false);
+		$lang->load('mod_fabrik_list', $client->path . '/modules/mod_fabrik_list', null, false, false);
 		$this->listform	= $this->get('PackageListForm');
 		JHtml::_('behavior.modal', 'a.modal');
 		parent::display('list');
