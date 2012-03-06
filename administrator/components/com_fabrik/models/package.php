@@ -91,6 +91,18 @@ class FabrikModelPackage extends FabModelAdmin
 
 		return $data;
 	}
+	
+	/**
+	* called when the table is saved
+	* here we are hacking various repeat data into the params
+	* data stored as a json object
+	* @param	$item
+	*/
+	
+	function prepareTable(&$item)
+	{
+		$item->component_name = strtolower($item->component_name);
+	}
 
 	/**
 	 * save the pacakge

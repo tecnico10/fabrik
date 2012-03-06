@@ -16,6 +16,9 @@ $shortName = substr($option, 4);
 $query->select('id')->from('#__fabrik_packages')->where('(component_name = ' . $db->Quote($option) . ' OR component_name = ' . $db->quote($shortName) . ') AND external_ref <> ""')->order('version DESC');
 $db->setQuery($query, 0, 1);
 $id = $db->loadResult();
+
+$app = JFactory::getApplication();
+$app->setUserState('com_fabrik.package', $shortName);
 if ($id == '')
 {
 	JError::raiseError(500, 'Could not load package');
@@ -31,7 +34,6 @@ jimport('joomla.filesystem.file');
 $app = JFactory::getApplication();
 $app->setUserState('com_fabrik.package', $option);
 
-//echo $app->getUserState('com_fabrik.package');exit;
 JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_fabrik/tables');
 JModel::addIncludePath(JPATH_SITE . '/components/com_fabrik/models');
 JRequest::setVar('task', 'package.view');

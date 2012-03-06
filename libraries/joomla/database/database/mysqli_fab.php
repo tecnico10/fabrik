@@ -36,7 +36,7 @@ class JDatabaseMySQLi_Fab extends JDatabaseMySQLi
 	public function replacePrefix($sql, $prefix='#__')
 	{
 		$app = JFactory::getApplication();
-		$package = $app->getUserState('com_fabrik.package', 'package', 'fabrik');
+		$package = $app->getUserStateFromRequest('com_fabrik.package', 'package', 'fabrik');
 		$pid = JRequest::getInt('packageid', 0);
 		if ($pid !== 0) 
 		{

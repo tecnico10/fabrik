@@ -425,7 +425,7 @@ class FabrikModelElement extends JModelAdmin
 	 * @param $item
 	 */
 
-	function prepareTable($item) {
+	function prepareTable(&$item) {
 
 	}
 
