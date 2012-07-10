@@ -20,6 +20,7 @@ var Autofill = new Class({
 	initialize: function (options) {
 		this.setOptions(options);
 		this.attached = [];
+		this.eventSetUp = [];
 		/*if (Browser.ie) {
 			this.setUp(Fabrik.blocks['form_' + this.options.formid]);
 		} else {
@@ -47,62 +48,80 @@ var Autofill = new Class({
 	},
 	
 	/**
-	 * get the observable element
-	 * @return element object
+	 * get the observable elements
+	 * @return array element object
 	 */
 	getElement: function () {
 		var testE = false;
 		var e = this.form.formElements.get(this.options.observe);
-		//if its a joined element
+		// if its a joined element
 		if (!e) {
 			var k = Object.keys(this.form.formElements);
 			var ii = k.each(function (i) {
 				if (i.contains(this.options.observe)) {
 					testE = this.form.formElements.get(i);
 					if (!this.attached.contains(testE.options.element)) {
-						//we havent previously observed this element, add it to this.attached
+						// we havent previously observed this element, add it to this.attached
 						// so that in the future we don't re-add it.
 						this.attached.push(testE.options.element);
 						e = testE;
 					}
 				}
 			}.bind(this));
+		} else {
+			if (!this.attached.contains(this.options.observe)) {
+				this.attached.push(this.options.observe);
+			}
 		}
-		return e;
+		// return e;
+		return this.attached;
 	},
 	
 	setUp: function (form) {
 		try {
 			this.form = form;
 		} catch (err) {
-			//form_x not found (detailed view perhaps)
+			// form_x not found (detailed view perhaps)
 			return;
 		}
 		var e = this.getElement();
 		if (!e) {
 			return false;
 		}
-		this.element = e;
 		var evnt = this.lookUp.bind(this);
-		if (this.options.trigger === '') {
-			if (!this.element) {
-				fconsole('autofill - couldnt find element to observe');
-			} else {
-				var elEvnt = this.element.getBlurEvent();
-				this.form.dispatchEvent('', this.element.options.element, elEvnt, evnt);
+		
+		for (var i = 0; i < this.attached.length; i++) {
+			var attached = this.attached[i];
+			if (this.eventSetUp.contains(attached)) {
+				continue;
 			}
-		} else {
-			this.form.dispatchEvent('', this.options.trigger, 'click', evnt);
+			this.eventSetUp.push(attached);
+			var element = this.form.formElements.get(attached);
+			if (this.options.trigger === '') {
+				if (!element) {
+					fconsole('autofill - couldnt find element to observe');
+				} else {
+					var elEvnt = element.getBlurEvent();
+					var evnt = this.lookUp.bind(this, attached);
+					this.form.dispatchEvent('', attached, elEvnt, evnt);
+				}
+			} else {
+				// @todo trigger in repeat groups to test!
+				this.form.dispatchEvent('', this.options.trigger, 'click', evnt);
+			}
 		}
-		if (this.options.fillOnLoad && form.options.rowid === '0') {
+		
+		/*if (this.options.fillOnLoad && form.options.rowid === '0') {
 			var t = this.options.trigger === '' ? this.element.strElement : this.options.trigger;
 			this.form.dispatchEvent('', t, 'load', evnt);
-		}
+		}*/
 	},
 	
 	// perform ajax lookup when the observer element is blurred
 	
-	lookUp: function () {
+	lookUp: function (attached) {
+		console.log('lookup', attached);
+		var element = this.form.formElements.get(attached);
 		if (this.options.confirm === true) {
 			if (!confirm(Joomla.JText._('PLG_FORM_AUTOFILL_DO_UPDATE'))) {
 				return;
@@ -110,7 +129,7 @@ var Autofill = new Class({
 		}
 		Fabrik.loader.start('form_' + this.options.formid, Joomla.JText._('PLG_FORM_AUTOFILL_SEARCHING'));
 		
-		var v = this.element.getValue();
+		var v = element.getValue();
 		var formid = this.options.formid;
 		var observe = this.options.observe;
 		
@@ -144,14 +163,14 @@ var Autofill = new Class({
 			}.bind(this),
 			onSuccess: function (json, responseText) {
 				Fabrik.loader.stop('form_' + this.options.formid);
-				this.updateForm(json);
+				this.updateForm(json, element);
 			}.bind(this)
 		}).send();
 	},
 	
 	// Update the form from the ajax request returned data
-	updateForm: function (json) {
-		var repeatNum = this.element.getRepeatNum();
+	updateForm: function (json, element) {
+		var repeatNum = element.getRepeatNum();
 		json = $H(json);
 		if (json.length === 0) {
 			alert(Joomla.JText._('PLG_FORM_AUTOFILL_NORECORDS_FOUND'));
@@ -167,7 +186,7 @@ var Autofill = new Class({
 						if (!this.tryUpdate(key, val)) {
 							// See if the user has used simply the full element name rather than the full element name with
 							// the join string
-							key = 'join___' + this.element.options.joinid + '___' + key;
+							key = 'join___' + element.options.joinid + '___' + key;
 							this.tryUpdate(key, val);
 						}
 					}
